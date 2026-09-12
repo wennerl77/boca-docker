@@ -94,7 +94,8 @@ RUN \
     # && a2enconf php8.1-fpm \
     && apache2ctl configtest
 
-COPY --chmod=755 --chown="$APACHE_RUN_USER:$APACHE_RUN_GROUP" docker/dev/web/init.sh /
+COPY --chown="$APACHE_RUN_USER:$APACHE_RUN_GROUP" docker/dev/web/init.sh /
+RUN chmod 755 /init.sh
 
 # Create a non-root user for the container
 USER $APACHE_RUN_USER

@@ -85,13 +85,15 @@ RUN boca-createjail || true
 RUN apt-get -y update \
     && apt-get -y install \
         openjdk-17-jdk-headless \
+    && mkdir -p /home/bocajail/usr/bin \
     && JDK_DIR=$(find /usr/lib/jvm -maxdepth 1 -type d -name 'java-17-openjdk-*' | head -n1) \
     && ln -sf "$JDK_DIR/bin/java"  /home/bocajail/usr/bin/java \
     && ln -sf "$JDK_DIR/bin/javac" /home/bocajail/usr/bin/javac \
     && ln -sf "$JDK_DIR/bin/jar"   /home/bocajail/usr/bin/jar \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --chmod=755 docker/dev/jail/init.sh /
+COPY docker/dev/jail/init.sh /
+RUN chmod 755 /init.sh
 
 # Add HEALTHCHECK instruction to the container image
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=5 \
